@@ -30,7 +30,7 @@ class _MyHomePageState extends State<HomePage> {
         child: ListView.builder(
           itemCount: moments.length,
           itemBuilder: (context, index) {
-            ///TODO: optomize this, checking like this to display the headers is not good at all, and will not work for multi-month views as it
+            ///TODO: optomize this, checking like this to display the header is not good at all, and will not work for multi-month views as it
             ///only uses days to compare
             bool showDate = false;
             Moment moment = moments[index];
@@ -72,8 +72,9 @@ class _MyHomePageState extends State<HomePage> {
                     trailing: InkWell(
                       onTap: () {
                         setState(() {
+                          bool _allTaken = _haveTakenMedicine(medicines: moment.medicines);
                           for (var medicine in moment.medicines) {
-                            medicine.taken = !medicine.taken;
+                            medicine.taken = !_allTaken;
                           }
                         });
                       },
@@ -82,6 +83,32 @@ class _MyHomePageState extends State<HomePage> {
                           padding: const EdgeInsets.all(4),
                           child: Image.asset(_getCheckboxImage(medicines: moment.medicines))),
                     ),
+                    children: [
+                      if (moment.isCompleted)
+                        Container(
+                          color: Colors.lightGreen,
+                          height: 4,
+                        ),
+                      ...moment.medicines
+                          .map((Medicine medicine) => ListTile(
+                                tileColor: Colors.white,
+                                title: Text(
+                                  medicine.name,
+                                ),
+                                trailing: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      medicine.taken = !medicine.taken;
+                                    });
+                                  },
+                                  child: Container(
+                                      width: 40,
+                                      padding: const EdgeInsets.all(4),
+                                      child: Image.asset(_getCheckboxImage(medicines: [medicine]))),
+                                ),
+                              ))
+                          .toList()
+                    ],
                   ),
                 )
               ],
@@ -93,7 +120,7 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   Color _getBackgroundColor({required Moment moment}) {
-    bool allDone = _haveTaken(medicines: moment.medicines);
+    bool allDone = _haveTakenMedicine(medicines: moment.medicines);
     moment.isCompleted = allDone;
     return moment.isCompleted ? Theme.of(context).primaryColor : Theme.of(context).backgroundColor;
   }
@@ -103,13 +130,13 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   String _getCheckboxImage({required List<Medicine> medicines}) {
-    if (_haveTaken(medicines: medicines)) {
+    if (_haveTakenMedicine(medicines: medicines)) {
       return 'assets/images/${CheckboxEnum.checkboxCheckedGreen.value}.png';
     }
     return 'assets/images/${CheckboxEnum.checkboxEmpty.value}.png';
   }
 
-  bool _haveTaken({required List<Medicine> medicines}) {
+  bool _haveTakenMedicine({required List<Medicine> medicines}) {
     if (medicines.where((Medicine medicine) => medicine.taken == false).toList().isNotEmpty) return false;
     return true;
   }
