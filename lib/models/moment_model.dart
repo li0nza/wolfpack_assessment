@@ -2,7 +2,7 @@ import 'package:wolfpack_assessment/utils/enums.dart';
 
 class Moment {
   final String title;
-  final Icon icon;
+  final IconEnum icon;
   final List<Medicine> medicines;
   final DateTime date;
   bool isCompleted;

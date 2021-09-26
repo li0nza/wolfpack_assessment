@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-enum Icon {
+enum IconEnum {
   ///TODO: add white icons
   baselineAlarmBlack24pt,
   baselineBusinessCenterBlack24pt,
@@ -9,7 +9,7 @@ enum Icon {
   baselineHomeBlack24pt,
   baselineLocalPharmacyBlack24pt,
 }
-extension IconExtension on Icon {
+extension IconExtension on IconEnum {
   String get value => describeEnum(this);
 }
 

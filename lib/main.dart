@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wolfpack_assessment/providers/moment_provider.dart';
 import 'package:wolfpack_assessment/views/home.dart';
 
 void main() {
@@ -11,15 +13,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Wolfpack Assessment',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        primaryColor: const Color(0xFF3C0038),
-        accentColor: const Color(0xFFFEDEBA),
-        backgroundColor: Colors.white,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => MomentProvider()),
+      ],
+      child: MaterialApp(
+        title: 'Wolfpack Assessment',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          primaryColor: const Color(0xFF3C0038),
+          accentColor: const Color(0xFFFEDEBA),
+          backgroundColor: Colors.white,
+        ),
+        home: const HomePage(),
       ),
-      home: const HomePage(),
     );
   }
 }
